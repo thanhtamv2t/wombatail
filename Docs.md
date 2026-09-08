@@ -227,10 +227,3 @@ npm test          # unit tests
 npm run selftest  # compiler self-test
 npm run benchmark # perf benchmarks
 ```
-
-## Docs
-
-- [`SUPPORTED.md`](docs/SUPPORTED.md) — full list of supported utilities
-- [`PRODUCTION.md`](docs/PRODUCTION.md) — pre-release checklist
-- [`COMPATIBILITY.md`](docs/COMPATIBILITY.md) — version matrix
-- [`ARCHITECTURE.md`](docs/ARCHITECTURE.md) — how the compiler works

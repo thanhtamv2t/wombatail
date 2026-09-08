@@ -1,6 +1,10 @@
-# Wombatail 1.0.0-rc.2
+<p align="center">
+  <img src="./logo.png" alt="Wombatail" width="240" />
+</p>
 
-**NativeWind/Tailwind-like `className` authoring with `react-native-unistyles` v3 as the styling engine. No runtime class parser.**
+# Wombatail
+
+Write Tailwind-like `className` in React Native. Wombatail compiles it away at build time into direct `react-native-unistyles` v3 calls — no runtime class parser, no overhead.
 
 ```tsx
 <View
@@ -16,27 +20,25 @@
 </View>
 ```
 
-Wombatail removes statically analyzable `className` expressions during Babel compilation and emits direct `StyleSheet.create(theme => ...)` styles from `react-native-unistyles`.
-
 ## Status
 
-`1.0.0-rc.2` is the production-hardening candidate. Core tests, deterministic fuzzing, packaging smoke tests and compiler benchmarks are automated. See [`docs/PRODUCTION.md`](docs/PRODUCTION.md) for the final real-app integration gate before promoting the package to stable `1.0.0`.
+`1.0.0-rc.2` — release candidate. Tests, fuzzing, smoke tests and benchmarks are all green. See [`PRODUCTION.md`](docs/PRODUCTION.md) for what's left before `1.0.0`.
 
-## Install
+## Getting started
 
 ```bash
 npm install ./babel-plugin-wombatail-1.0.0-rc.2.tgz
 npm install react-native-unistyles react-native-nitro-modules
 ```
 
-Required baseline follows Unistyles v3: React 19+, React Native 0.78+ with New Architecture, and Expo SDK 53+ for Expo apps. Expo Go is not supported by Unistyles native code.
+You'll need React 19+, React Native 0.78+ (New Architecture), and Expo SDK 53+ if you're on Expo. Expo Go won't work — Unistyles needs native code.
 
-## Configure
+### One config file
 
-One file is the single source of truth: the Babel plugin reads `themes`/`breakpoints` from it at build time, and `defineWombatailConfig` configures Unistyles at runtime.
+`wombatail.config.ts` is the single source of truth. The Babel plugin reads `themes`/`breakpoints` from it at build time; `defineWombatailConfig` hands the same object to Unistyles at runtime.
 
 ```bash
-npx wombatail init   # scaffolds wombatail.config.ts (--js for JavaScript)
+npx wombatail init   # --js for a JavaScript config
 ```
 
 ```ts
@@ -85,7 +87,7 @@ declare module 'react-native-unistyles' {
 }
 ```
 
-Import it once at the top of the app entry, before any module that creates stylesheets — this ordering is a Unistyles requirement:
+Import it once at the very top of your entry file — Unistyles has to be configured before any module creates a stylesheet:
 
 ```ts
 // index.ts
@@ -97,13 +99,11 @@ import App from './src/App'
 registerRootComponent(App)
 ```
 
-### Static-only config
+The compiler parses this file instead of running it, so keep `themes` and `breakpoints` as plain object literals (a top-level `const` reference is fine). If you need a dynamic config, set `configFile: false` in the plugin options and pass `breakpoints`/`themeColorTokens` yourself.
 
-The compiler reads the config **without executing it**, so `themes` and `breakpoints` must be inline object literals (top-level `const` references and `defineWombatailConfig(...)` wrapping are fine; imported values, spreads of imports and computed keys are not). A non-analyzable config fails the build with an explicit message. For a dynamic config, set `configFile: false` and pass `breakpoints`/`themeColorTokens` as plugin options instead.
+### Babel setup
 
-## Babel
-
-Use the helper to lock plugin order:
+Wombatail ships a helper that wires up plugin order for you:
 
 ```js
 const { createBabelPlugins } = require('babel-plugin-wombatail/babel-config')
@@ -119,26 +119,19 @@ module.exports = function (api) {
 }
 ```
 
-`createBabelPlugins` accepts a `wombatail` option object for anything the config file does not cover; explicit options always win over the config file:
+Anything the config file doesn't cover still goes in a `wombatail: { ... }` option object, and explicit options always beat the config file.
 
-| Option | Effect |
-| --- | --- |
-| `configFile` | `false` disables config lookup, a string points at an explicit file, `true` requires one. |
-| `breakpoints` | Overrides the breakpoint names read from the config file. |
-| `themeColorTokens` | Overrides the semantic color allow-list read from the config file. |
-| `allowUnknownThemeColors` | Defaults to `false` when a config file supplies tokens, otherwise `true`. |
+Wombatail needs to run **before** the Unistyles plugin (it generates the `StyleSheet.create` calls that Unistyles then picks up). If you also use React Compiler, slot Unistyles before it — that's a Unistyles requirement.
 
-Wombatail must run before the Unistyles Babel plugin because it generates the direct Unistyles `StyleSheet.create` call. If you use React Compiler, keep Unistyles before React Compiler as required by Unistyles.
+## What works
 
-## What compiles
-
-Static:
+**Static classes** — the straightforward case:
 
 ```tsx
 <View className="flex-row items-center px-4 py-3 bg-surface rounded-xl" />
 ```
 
-Conditional:
+**Conditionals** — ternaries and `&&` are fine:
 
 ```tsx
 <View className={cn(
@@ -148,20 +141,20 @@ Conditional:
 )} />
 ```
 
-Const binding:
+**Const bindings** — extracted class strings compile too:
 
 ```tsx
 const cardClass = 'p-4 rounded-xl bg-surface' as const
 <View className={cardClass} />
 ```
 
-Breakpoint + platform:
+**Breakpoints & platform prefixes**:
 
 ```tsx
 <View className="px-4 md:px-6 ios:mt-4 ios:md:bg-primary" />
 ```
 
-Arbitrary native-safe values:
+**Arbitrary values** (native-safe):
 
 ```tsx
 <View className="w-[137px] rounded-[13px] bg-[#123456]" />
@@ -177,25 +170,18 @@ border-border          -> theme.colors.border
 tint-primary           -> theme.colors.primary
 ```
 
-Tokens are collected from every `themes.*.colors` key in `wombatail.config.*`. With a config file present, `allowUnknownThemeColors` defaults to `false`, so a theme typo is a build error instead of a runtime `undefined`. Without one, pass `themeColorTokens` plus `allowUnknownThemeColors: false` as plugin options to get the same guarantee.
+Tokens come from every `themes.*.colors` key in your config file, and `allowUnknownThemeColors` flips to `false` automatically when a config file is found — so a typo like `bg-primry` fails the build instead of resolving to `undefined` at runtime. Without a config file, set `allowUnknownThemeColors: false` and pass `themeColorTokens` yourself.
 
 ## Style precedence
 
-Explicit `style` is always last:
+Inline `style` always wins — it goes last in the array:
 
 ```tsx
 <View className="p-4 bg-surface" style={animatedStyle} />
+// compiles to roughly: <View style={[compiledStyle, animatedStyle]} />
 ```
 
-becomes conceptually:
-
-```tsx
-<View style={[compiledStyle, animatedStyle]} />
-```
-
-Wombatail never spreads Unistyles proxy styles.
-
-Pressable callbacks are composed safely:
+Pressable callbacks compose correctly:
 
 ```tsx
 <Pressable
@@ -204,47 +190,40 @@ Pressable callbacks are composed safely:
 />
 ```
 
-## Deliberately rejected
+## What doesn't work (on purpose)
 
 ```tsx
-// Runtime class parsing is intentionally not shipped.
+// No runtime parsing — className must be statically analyzable
 <View className={props.className} />
 
-// Runtime interpolation is not analyzable.
+// Template literal interpolation can't be resolved at build time
 <View className={`bg-${color}`} />
 ```
 
-JSX spread + `className` is rejected by default because a spread can contain runtime `className`/`style` and make prop precedence unknowable. Prefer explicit props. An audited project can opt into `allowJsxSpread: true`.
+JSX spread + `className` is also rejected by default. A spread could sneak in runtime `className`/`style` and mess up precedence. If you've audited your code and know it's safe, flip `allowJsxSpread: true`.
 
 ## TypeScript
 
-Create `wombatail-env.d.ts`:
+Add a `wombatail-env.d.ts`:
 
 ```ts
 /// <reference types="babel-plugin-wombatail" />
 ```
 
-For reusable design-system components, accept/forward `style`. Arbitrary incoming runtime `className` forwarding is outside the zero-runtime-parser contract.
+For design-system components, accept and forward `style`. Don't forward `className` across component boundaries — that breaks the zero-runtime contract.
 
-## Production doctor
+## Doctor
 
 ```bash
 npx wombatail doctor
 ```
 
-It checks visible versions of Node, React, React Native, Unistyles, Nitro Modules and Babel, reports the resolved `wombatail.config.*`, then prints the manual New Architecture/Babel-root checks. `npx wombatail init` scaffolds the config file.
+Checks your Node, React, React Native, Unistyles, Nitro Modules and Babel versions, reports which `wombatail.config.*` it resolved, then flags anything that needs attention. `npx wombatail init` scaffolds the config file.
 
-## Verification
+## Testing
 
 ```bash
-npm test
-npm run selftest
-npm run benchmark
+npm test          # unit tests
+npm run selftest  # compiler self-test
+npm run benchmark # perf benchmarks
 ```
-
-See:
-
-- [`docs/SUPPORTED.md`](docs/SUPPORTED.md)
-- [`docs/PRODUCTION.md`](docs/PRODUCTION.md)
-- [`docs/COMPATIBILITY.md`](docs/COMPATIBILITY.md)
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
