@@ -18,9 +18,9 @@ export default defineConfig({
         './src/styles/wombatail.css',
       ],
       logo: {
-        src: './src/assets/logo.png',
+        src: './src/assets/wordmark.png',
         alt: 'Wombatail',
-        replacesTitle: false,
+        replacesTitle: true,
       },
       social: [
         {
