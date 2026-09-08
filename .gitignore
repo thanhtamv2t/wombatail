@@ -5,6 +5,10 @@ node_modules/
 dist/
 *.tgz
 
+# Astro (docs site)
+.astro/
+website/.astro/
+
 # OS
 .DS_Store
 Thumbs.db

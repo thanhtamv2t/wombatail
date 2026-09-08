@@ -9,11 +9,18 @@
     "src",
     "types",
     "bin",
-    "docs",
     "README.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
+  "homepage": "https://thanhtamv2t.github.io/wombatail/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thanhtamv2t/wombatail.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thanhtamv2t/wombatail/issues"
+  },
   "bin": {
     "wombatail": "bin/wombatail.js"
   },
