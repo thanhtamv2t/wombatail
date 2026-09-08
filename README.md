@@ -100,7 +100,8 @@ npm test          # unit tests
 npm run selftest  # compiler self-test
 npm run benchmark # perf benchmarks
 
-cd website && npm install && npm run dev   # docs site
+# docs site (needs Node 22.12+; the library itself supports Node 18.18+)
+cd website && npm install && npm run dev
 ```
 
 ## License
