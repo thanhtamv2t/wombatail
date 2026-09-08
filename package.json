@@ -1,0 +1,79 @@
+{
+  "name": "babel-plugin-wombatail",
+  "version": "1.0.0-rc.2",
+  "description": "Compile-time Tailwind-like className syntax for React Native, powered by react-native-unistyles v3",
+  "main": "src/index.js",
+  "types": "types/index.d.ts",
+  "sideEffects": false,
+  "files": [
+    "src",
+    "types",
+    "bin",
+    "docs",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "wombatail": "bin/wombatail.js"
+  },
+  "keywords": [
+    "wombatail",
+    "react-native",
+    "unistyles",
+    "tailwind",
+    "babel",
+    "styling",
+    "className",
+    "compile-time"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.24.0"
+  },
+  "peerDependencies": {
+    "@babel/core": ">=7.24.0 <9",
+    "react": ">=19.0.0 <20",
+    "react-native": ">=0.78.0 <1",
+    "react-native-unistyles": ">=3.0.0 <4"
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "selftest": "node scripts/selftest.js",
+    "benchmark": "node scripts/benchmark.js",
+    "verify": "npm run selftest",
+    "prepublishOnly": "npm test && npm run selftest",
+    "pack": "npm pack",
+    "release": "npm publish --dry-run",
+    "release:publish": "npm publish --access public"
+  },
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "require": "./src/index.js",
+      "default": "./src/index.js"
+    },
+    "./types": {
+      "types": "./types/index.d.ts",
+      "default": "./types/index.d.ts"
+    },
+    "./babel-config": {
+      "types": "./types/babel-config.d.ts",
+      "require": "./src/babel-config.js",
+      "default": "./src/babel-config.js"
+    },
+    "./runtime": {
+      "types": "./types/runtime.d.ts",
+      "require": "./src/runtime.js",
+      "default": "./src/runtime.js"
+    },
+    "./resolver": {
+      "require": "./src/resolver.js",
+      "default": "./src/resolver.js"
+    },
+    "./package.json": "./package.json"
+  }
+}
