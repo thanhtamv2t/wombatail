@@ -1,0 +1,87 @@
+---
+title: CLI
+description: wombatail init and wombatail doctor.
+---
+
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
+```bash
+npx wombatail <command> [flags]
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```bash
+yarn wombatail <command> [flags]
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```bash
+pnpm wombatail <command> [flags]
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```bash
+bunx wombatail <command> [flags]
+```
+
+</TabItem>
+</Tabs>
+
+`doctor` is the default when no command is given.
+
+## `wombatail init`
+
+Scaffolds `wombatail.config.ts` next to your project root and prints the entry-file
+import you still need to add.
+
+```bash
+wombatail init        # TypeScript config
+wombatail init --js   # JavaScript config
+```
+
+If a config already exists it reports the path and leaves it alone.
+
+## `wombatail doctor`
+
+Checks Node, React, React Native, Unistyles, Nitro Modules and Babel versions, reports
+which `wombatail.config.*` it resolved, then flags anything that needs attention.
+
+```bash
+wombatail doctor
+wombatail doctor --json   # machine-readable output for CI
+```
+
+The exit code is `0` when every check passes and `1` when any check fails, so
+`doctor --json` works as a CI gate.
+
+:::note
+The doctor validates the package versions it can inspect. It **cannot** prove that the
+New Architecture is enabled, that Babel roots are correct, that your Unistyles config
+loads before the first `StyleSheet.create`, or that you're on a dev/native build rather
+than Expo Go. Keep the [production checklist](/wombatail/reference/production/) for
+those.
+:::
+
+## `wombatail help`
+
+```bash
+wombatail help
+wombatail --help
+```
+
+## Flags
+
+| Flag | Command | Description |
+| --- | --- | --- |
+| `--js` | `init` | Emit a JavaScript config instead of TypeScript. |
+| `--json` | `doctor` | Machine-readable output. |
+| `--help`, `-h` | any | Print usage. |

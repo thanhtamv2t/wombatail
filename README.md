@@ -81,6 +81,7 @@ Full walkthrough: **[Getting started](https://thanhtamv2t.github.io/wombatail/ge
 | [Getting started](https://thanhtamv2t.github.io/wombatail/getting-started/) | Install, config file, Babel setup |
 | [Syntax](https://thanhtamv2t.github.io/wombatail/guides/syntax/) | Class expressions that compile |
 | [Theming](https://thanhtamv2t.github.io/wombatail/guides/theming/) | Semantic tokens → `theme.colors.*` |
+| [Switching themes](https://thanhtamv2t.github.io/wombatail/guides/theme-switching/) | Adaptive themes, runtime toggle, persistence |
 | [Style precedence](https://thanhtamv2t.github.io/wombatail/guides/style-precedence/) | How `className` composes with `style` |
 | [Limitations](https://thanhtamv2t.github.io/wombatail/guides/limitations/) | What's rejected, and why |
 | [Plugin options](https://thanhtamv2t.github.io/wombatail/reference/options/) | Every Babel option |

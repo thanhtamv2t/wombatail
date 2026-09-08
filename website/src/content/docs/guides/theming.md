@@ -34,6 +34,9 @@ There is no `dark:` prefix. Use semantic Unistyles themes instead — define `li
 `dark` in your config with the same token names, and let `settings.adaptiveThemes` or
 `initialTheme` pick between them. `bg-surface` then resolves correctly in both.
 
+See [switching themes](/wombatail/guides/theme-switching/) for adaptive themes, a
+runtime toggle, and persisting the user's choice.
+
 ## Breakpoints
 
 Breakpoint names in Wombatail must match registered Unistyles breakpoints. With

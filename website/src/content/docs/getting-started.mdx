@@ -5,6 +5,8 @@ sidebar:
   order: 1
 ---
 
+import { Tabs, TabItem } from '@astrojs/starlight/components'
+
 ## Requirements
 
 - React 19+
@@ -15,10 +17,51 @@ sidebar:
 
 ## Install
 
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
 ```bash
 npm install --save-dev babel-plugin-wombatail
 npm install react-native-unistyles react-native-nitro-modules
 ```
+
+</TabItem>
+<TabItem label="yarn">
+
+```bash
+yarn add --dev babel-plugin-wombatail
+yarn add react-native-unistyles react-native-nitro-modules
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```bash
+pnpm add --save-dev babel-plugin-wombatail
+pnpm add react-native-unistyles react-native-nitro-modules
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```bash
+bun add --dev babel-plugin-wombatail
+bun add react-native-unistyles react-native-nitro-modules
+```
+
+</TabItem>
+</Tabs>
+
+:::tip[On Expo]
+Install the two native packages with Expo:
+
+```bash
+npx expo install react-native-unistyles react-native-nitro-modules
+```
+
+This lets Expo pick versions matching your SDK. Wombatail itself is a build-time
+dependency and can be added with any package manager.
+:::
 
 ## One config file
 
@@ -26,9 +69,36 @@ npm install react-native-unistyles react-native-nitro-modules
 and `breakpoints` from it at build time; `defineWombatailConfig` hands the same object
 to Unistyles at runtime.
 
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
 ```bash
-npx wombatail init   # --js for a JavaScript config
+npx wombatail init        # --js for a JavaScript config
 ```
+
+</TabItem>
+<TabItem label="yarn">
+
+```bash
+yarn wombatail init       # --js for a JavaScript config
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```bash
+pnpm wombatail init       # --js for a JavaScript config
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```bash
+bunx wombatail init       # --js for a JavaScript config
+```
+
+</TabItem>
+</Tabs>
 
 ```ts title="wombatail.config.ts"
 import { defineWombatailConfig } from 'babel-plugin-wombatail/runtime'
@@ -75,8 +145,12 @@ declare module 'react-native-unistyles' {
 }
 ```
 
-Import it once at the very top of your entry file — Unistyles has to be configured
-before any module creates a stylesheet:
+Keeping matching token names in `light` and `dark` is what makes
+[theme switching](/wombatail/guides/theme-switching/) work — `bg-surface` then resolves
+correctly under either theme.
+
+Import the config once at the very top of your entry file — Unistyles has to be
+configured before any module creates a stylesheet:
 
 ```ts title="index.ts"
 import './wombatail.config'
@@ -138,9 +212,36 @@ Add a `wombatail-env.d.ts` so `className` is typed on React Native components:
 
 ## Check your setup
 
+<Tabs syncKey="pkg">
+<TabItem label="npm">
+
 ```bash
 npx wombatail doctor
 ```
+
+</TabItem>
+<TabItem label="yarn">
+
+```bash
+yarn wombatail doctor
+```
+
+</TabItem>
+<TabItem label="pnpm">
+
+```bash
+pnpm wombatail doctor
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```bash
+bunx wombatail doctor
+```
+
+</TabItem>
+</Tabs>
 
 It validates the versions it can inspect and reports which `wombatail.config.*` it
 resolved. See the [CLI reference](/wombatail/reference/cli/).

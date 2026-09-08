@@ -12,6 +12,11 @@ export default defineConfig({
       title: 'Wombatail',
       description:
         'Compile-time Tailwind-like className for React Native, powered by react-native-unistyles v3.',
+      customCss: [
+        '@fontsource-variable/fredoka',
+        '@fontsource-variable/nunito-sans',
+        './src/styles/wombatail.css',
+      ],
       logo: {
         src: './src/assets/logo.png',
         alt: 'Wombatail',
@@ -34,6 +39,7 @@ export default defineConfig({
           items: [
             { label: 'Syntax', slug: 'guides/syntax' },
             { label: 'Theming', slug: 'guides/theming' },
+            { label: 'Switching themes', slug: 'guides/theme-switching' },
             { label: 'Style precedence', slug: 'guides/style-precedence' },
             { label: 'Limitations', slug: 'guides/limitations' },
             { label: 'TypeScript', slug: 'guides/typescript' },
@@ -47,8 +53,6 @@ export default defineConfig({
             { label: 'Supported utilities', slug: 'reference/supported' },
             { label: 'Compatibility contract', slug: 'reference/compatibility' },
             { label: 'Architecture', slug: 'reference/architecture' },
-            { label: 'Production checklist', slug: 'reference/production' },
-            { label: 'Validation', slug: 'reference/validation' },
           ],
         },
       ],
