@@ -334,6 +334,21 @@ starlight-toc nav {
   white-space: nowrap;
 }
 
+/* Code terms inside headings should read as part of the title, not as nested input boxes. */
+.sl-markdown-content :is(h1, h2, h3, h4, h5, h6) code {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+}
+
 .expressive-code {
   filter: drop-shadow(5px 5px 0 var(--wombat-ink));
 }
@@ -417,6 +432,11 @@ starlight-tabs .tab > [role='tab'] {
   box-shadow: none;
   font-family: 'Fredoka Variable', ui-rounded, sans-serif;
   font-weight: 650;
+}
+
+starlight-tabs .tab > [role='tab'] > svg {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 starlight-tabs .tab [role='tab'][aria-selected='true'] {
