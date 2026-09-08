@@ -19,6 +19,7 @@ Thumbs.db
 *.swp
 *.swo
 
-# AI project notes / roadmap
-PROJECT_STATE.md
-docs/
+# AI project notes / roadmap (root only — leading slash keeps this from
+# matching website/src/content/docs/)
+/PROJECT_STATE.md
+/docs/

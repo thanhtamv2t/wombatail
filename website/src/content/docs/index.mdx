@@ -1,0 +1,52 @@
+---
+title: Wombatail
+description: Compile-time Tailwind-like className for React Native, powered by react-native-unistyles v3.
+template: splash
+hero:
+  tagline: Write Tailwind-like <code>className</code> in React Native. Wombatail compiles it away at build time into direct react-native-unistyles v3 calls — no runtime class parser, no overhead.
+  image:
+    file: ../../assets/logo.png
+  actions:
+    - text: Getting started
+      link: /wombatail/getting-started/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/thanhtamv2t/wombatail
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, Code } from '@astrojs/starlight/components'
+
+```tsx
+<View
+  className={cn(
+    'flex-row items-center gap-3 rounded-2xl bg-surface px-4 py-3',
+    selected && 'border border-primary',
+    disabled && 'opacity-50',
+    'md:px-6',
+    'ios:mt-4',
+  )}
+>
+  <Text className="text-lg font-semibold text-foreground">Hello</Text>
+</View>
+```
+
+<CardGrid stagger>
+  <Card title="Zero runtime" icon="rocket">
+    A Babel transform turns `className` into `StyleSheet.create` calls that Unistyles
+    executes. Nothing parses classes at runtime.
+  </Card>
+  <Card title="One config file" icon="setting">
+    `wombatail.config.ts` feeds themes and breakpoints to both the compiler and the
+    Unistyles runtime, so the two can never drift.
+  </Card>
+  <Card title="Typos fail the build" icon="approve-check">
+    Unsupported utilities and unknown theme tokens are compile errors, not silent
+    `undefined` styles on device.
+  </Card>
+  <Card title="Honest scope" icon="information">
+    A deliberate React-Native-safe subset of Tailwind syntax — not a claim of full
+    CSS parity. [See what's supported](/wombatail/reference/supported/).
+  </Card>
+</CardGrid>
